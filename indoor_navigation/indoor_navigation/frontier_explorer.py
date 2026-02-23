@@ -28,15 +28,15 @@ class FrontierExplorer(Node):
         self.declare_parameter("publish_period_s", 1.0)
 
         self.declare_parameter("global_frame", "map")
-        self.declare_parameter("base_frame", "base_link")  # fallback to base_footprint if needed
+        self.declare_parameter("base_frame", "base_link")
 
         self.declare_parameter("nav_action_name", "/navigate_to_pose")
         self.declare_parameter("min_goal_separation_m", 0.75)
         self.declare_parameter("goal_cooldown_s", 3.0)
 
         # frontier scoring (simple)
-        self.declare_parameter("score_distance_weight", 1.0)  # bigger => prefer closer
-        self.declare_parameter("score_size_weight", 0.05)     # bigger => prefer bigger clusters
+        self.declare_parameter("score_distance_weight", 1.0)
+        self.declare_parameter("score_size_weight", 0.05)    
 
         self.map_topic = self.get_parameter("map_topic").value
         self.min_cluster_size = int(self.get_parameter("min_cluster_size").value)
@@ -71,6 +71,7 @@ class FrontierExplorer(Node):
             f"FrontierExplorer: map_topic={self.map_topic}, action={self.nav_action_name}, "
             f"global_frame={self.global_frame}, base_frame={self.base_frame}"
         )
+
         #“projection” du goal vers le libre + fallback BFS autour du centroïde
         self.declare_parameter("goal_backoff_m", 0.6)          # recul vers l'intérieur
         self.declare_parameter("goal_search_radius_m", 1.5)    # fallback autour du centroïde
@@ -97,7 +98,7 @@ class FrontierExplorer(Node):
         rx, ry = robot_xy
         fx, fy = f.centroid
         dist = math.hypot(fx - rx, fy - ry)
-        # Higher score is better
+        
         return (self.w_size * float(f.size)) - (self.w_dist * dist)
 
     def _pick_best_frontier(self, frontiers: List[Frontier], robot_xy: Tuple[float, float]) -> Optional[Frontier]:
@@ -127,7 +128,6 @@ class FrontierExplorer(Node):
             self.get_logger().warn("NavigateToPose action server not available yet.")
             return
 
-        # Orient the goal roughly facing from robot to goal (optional but nice)
         rx, ry = robot_xy
         yaw = math.atan2(gy - ry, gx - rx)
         qz = math.sin(yaw * 0.5)

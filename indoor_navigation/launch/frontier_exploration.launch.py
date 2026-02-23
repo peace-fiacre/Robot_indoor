@@ -11,7 +11,7 @@ def generate_launch_description():
             output="screen",
             parameters=[
                 {"map_topic": "/map"},
-                {"min_cluster_size": 10},      # baisse pour tester
+                {"min_cluster_size": 10},
                 {"publish_period_s": 1.0},
                 {"use_sim_time": True},
 
