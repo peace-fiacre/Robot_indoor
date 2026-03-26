@@ -86,7 +86,7 @@ def generate_launch_description():
                     os.path.join(launch_dir, "bringup_launch.py")
                 ),
                 launch_arguments={
-                    "map": LaunchConfiguration("map"),
+                    # "map": LaunchConfiguration("map"),
                     "use_sim_time": LaunchConfiguration("use_sim_time"),
                     "params_file": LaunchConfiguration("params_file"),
                     # "default_bt_xml_filename": LaunchConfiguration(
